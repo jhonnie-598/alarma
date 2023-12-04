@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css"/>
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <title>ALARMA ANTI-ROBO</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Control de Alarma</h1>
+    <form id="apagarForm">
+        <input type="submit" value="APAGAR">
+    </form>
+
+    <py-script>
+        from machine import Pin
+        import time
+
+        pir_pin = Pin(2, Pin.IN)  # Ajusta el número del pin según tu configuración
+
+        def pir_state():
+            return pir_pin.value()
+
+        # Función para apagar la alarma
+        def apagar_alarma():
+            # Agrega aquí las acciones que deseas realizar cuando se apaga la alarma
+            print("Alarma apagada")
+
+        # Manejar solicitud para apagar la alarma
+        if "GET /apagar_alarma" in pyscript.request:
+            apagar_alarma()
+            pyscript.response.write("Alarma apagada")
+
+        time.sleep(1)
+    </py-script>
+
+    <script>
+        document.getElementById("apagarForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Realizar una solicitud GET al servidor
+            fetch("/apagar_alarma")
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    // Puedes manejar la respuesta del servidor aquí
+                })
+                .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>
